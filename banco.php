@@ -22,21 +22,13 @@ $conta = [
 $contas[] = $conta;
 
 
+
+
 function cadastrarCliente(&$clientes, string $nome, string $cpf, string $telefone): void {
     
     //global $clientes; //Alternativa para acesso de variáveis fora do escopo da função
 
-    $verificador = false;
-                while ($verificador == false)
-                 {
-                   $cpf = readline("informe seu cpf : \n");
-                    if(strlen($cpf) == 11){
-                        print "o cpf informado : $cpf é válido \n ";
-                        $verificador = true;
-                    }else {
-                        print "O Cpf informado é inválido tente novamente . \n"; 
-                    }
-                }
+
 
     $cliente = [
         "nome" => $nome,
@@ -58,23 +50,24 @@ function cadastrarConta(&$contas, $cpfCliente): string {
     
     $contas[] = $conta;
 
-    return $conta['numeroConta'];
+    return $conta['uniqid()'];
+    return $conta['saldo'];
 }
 
 
-function depositar(&$contas , $numero_conta , $valor)
-{
+function depositar(&$contas , $cpf_conta , $valor)
+ { 
 
     foreach ($contas as &$conta)    
      {
-        if ($conta['numeroConta'] == $numero_conta) {
+        if ($conta["cpfCliente"] == $cpf_conta) {
             $conta['saldo'] += $valor;
 
-            print "recebeu  R$ {$valor}  na sua conta {$numero_conta}";
+            print "recebeu  R$ {$valor}  na sua conta {$cpf_conta}";
             break;
         }else {
             
-            print "Conta {$numero_conta} não encontrada \n";
+            print "Conta {$cpf_conta} não encontrada \n";
 
         }
         
@@ -84,19 +77,17 @@ function depositar(&$contas , $numero_conta , $valor)
 };
 
 
-function sacar(&$contas , $numero_conta, $valor)
+function sacar(&$contas , $cpf_conta, $valor)
 {
 
 
     foreach ($contas  as &$conta) 
     {
-        if ($conta['numeroConta'] == $numero_conta) {
-            $conta['saldo'] += $valor;
+        if ($conta['cpfCliente'] == $cpf_conta) {
+            $conta['saldo'] -= $valor;
+            print "{$conta['cpfCliente']} recebeu R$ $valor ";
             break;
-        }else {
-            print "Conta {$numero_conta} não encontrada \n";
         }
-
 
     }
 
@@ -110,7 +101,7 @@ function consultarSaldo(&$contas, $cpfConta)
     foreach ( $contas as &$conta) 
     {
         
-        if ($conta['cpf'] == $cpfConta)
+        if ($conta['cpfCliente'] == $cpfConta)
         {
          
          print "Saldo da conta {$cpfConta} é de {$conta['saldo']} ";
@@ -138,22 +129,22 @@ function menu()
         ──────────────────────────────────────────────────────────
 
     TEXTO;
-
-    
+ 
     do {
         print "{$inicio}";
         $escolha = readline(" Selecione uma opção para continuar : \n ");
         switch ($escolha) {
             case '1':
-                sleep(5);
+                sleep(3);
                 system('clear');
+
 
                 $cpf = "";
                 $nomeS = readline("informe seu nome : \n");
-                
+                $verificador = false;
                 while ($verificador == false)
                  {
-                   $telefone = readline("informe seu telefone : \n");
+                   $telefone = readline("informe seu telefone (10 digitos): \n");
                     if(strlen($telefone) == 10){
                         print "o telefone informado : $telefone é válido \n ";
                         $verificador = true;
@@ -161,15 +152,6 @@ function menu()
                         print "O telefone informado é inválido tente novamente . \n"; 
                     }
                 }
-
-                cadastrarCliente($contas, $nomeS , $cpf , $telefone);
-                break 1;
-            case '2':
-                sleep(5);
-                system('clear');
-
-                $cpf = "";
-                
                 $verificador = false;
                 while ($verificador == false)
                  {
@@ -182,42 +164,125 @@ function menu()
                     }
                 }
 
+                cadastrarCliente($contas, $nomeS , $cpf , $telefone);
+                break 1;
+            case '2':
+                sleep(3);
+                system('clear');
+
+                $cpf = "";
+                
+                $verificador = false;
+                while ($verificador == false)
+                 {
+                   $cpf = (int)readline("informe seu cpf (11 digitos): \n");
+                    if(strlen($cpf) == 11){
+                        print "o cpf informado : $cpf é válido \n ";
+                        $verificador = true;
+                    }else {
+                        print "O Cpf informado é inválido tente novamente . \n"; 
+                    }
+                }
+
 
                 cadastrarConta($contas, $cpf);
                 break 1;
             case '3':
-               
+               sleep(3); 
+               system('clear');
+                $cpf1 = 0;
+               $verificador = false;
                while ($verificador == false) 
                 { 
                                
-                    $cp = readline("informe o cpf da conta : . \n");
+                    $cpf1 = (int)readline("informe o cpf da conta (11 digitos):  \n");
                     foreach ($contas as &$conta) {
-                        if ($conta['cpf'] == $cp)
+                        if ($conta['cpfCliente'] == $cpf1)
                             {                                               
-                                print "cpf informado existente";
+                                print "cpf informado existente \n";
                                 $verificador = true;
+                                break;
                             }
                     }
                } 
                 
-                consultarSaldo($contas , $cp );
+                consultarSaldo($contas , $cpf1 );
                    break 1; 
 
             case '4':
-                 #  depositar();
+                sleep(3);
+                system('clear');
+                $cpf1 = 0;
+               $verificador = false;
+               while ($verificador == false) 
+                { 
+                               
+                    $cpf1 = (int)readline("informe o cpf da conta (11 digitos):  \n");
+                    foreach ($contas as &$conta) {
+                        if ($conta['cpfCliente'] == $cpf1)
+                            {                                               
+                                print "cpf informado existente \n";
+                                $verificador = true;
+                                break;
+                            }
+                    }
+               } 
+               $verificador2 = false;
+               while ($verificador2 == false) 
+               { 
+                              
+                   $valor = (int)readline("informe o para depositar na conta:  \n");
+                    if ($valor < 0 ) {
+                        print "Valor informado Inválido, informe um valor Real \n";
+                    }else {
+                        print "Valor informado válido \n";
+                        $verificador2 = true;
+                        depositar($contas , $cpf1 , $valor);
+                    }
+                 
+               }
+                    
                      break 1;  
                                               
             case '5':
-                  #sacar();
+                $cpf1 = 0;
+                $verificador = false;
+                while ($verificador == false) 
+                 { 
+                                
+                     $cpf1 = (int)readline("informe o cpf da conta (11 digitos):  \n");
+                     foreach ($contas as &$conta) {
+                         if ($conta['cpfCliente'] == $cpf1)
+                             {                                               
+                                 print "cpf informado existente \n";
+                                 $verificador = true;
+                                 break;
+                             }
+                     }
+                } 
+                $verificador2 = false;
+                while ($verificador2 == false) 
+                { 
+                               
+                    $valor = (int)readline("informe o valor para sacar da conta:  \n");
+                     if ($valor < 0 ) {
+                         print "Valor informado Inválido, informe um valor Real \n";
+                     }else {
+                         print "Valor informado válido \n";
+                         $verificador2 = true;
+                         sacar($contas, $cpf1 , $valor);
+                     }
+                  
+                }
+
                    break 1;   
 
+
             case '6':
-                
-                break 2; 
+                $verificador and $verificador2 = true;
+                  
+                   break 1;
  
-            default:
-                # code...
-                break ;
         }
     } while ($escolha != '6');
 
@@ -227,9 +292,8 @@ function menu()
 
 menu();
 
-cadastrarCliente($clientes, "Jefferson", "06800044455", "(45)99999999999");
-$numeroConta = cadastrarConta($contas, "06800044455");
+#cadastrarCliente($clientes, "Jefferson", "06800044455", "(45)99999999999");
+#$numeroConta = cadastrarConta($contas, "06800044455");
 
-consultarSaldo($contas, $numeroConta);
+#consultarSaldo($contas, $numeroConta);
 #print_r($contas);
-
