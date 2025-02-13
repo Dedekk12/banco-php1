@@ -15,7 +15,7 @@ $clientes[] = $cliente;
 
 $conta = [
     "numeroConta" => uniqid(),
-    "cpfCliente" => "00000000000",
+    "cpf" => "00000000000",
     "saldo" => 0
 ];
 
@@ -40,17 +40,17 @@ function cadastrarCliente(&$clientes, string $nome, string $cpf, string $telefon
     
 }
 
-function cadastrarConta(&$contas, $cpfCliente): string {
+function cadastrarConta(&$contas, $cpf): string {
     
     $conta = [
         "numeroConta" => uniqid(),
-        "cpfCliente" => $cpfCliente,
+        "cpf" => $cpf,
         "saldo" => 0
     ];
     
     $contas[] = $conta;
 
-    return $conta['uniqid()'];
+    return $conta['cpf'];
     return $conta['saldo'];
 }
 
@@ -60,7 +60,7 @@ function depositar(&$contas , $cpf_conta , $valor)
 
     foreach ($contas as &$conta)    
      {
-        if ($conta["cpfCliente"] == $cpf_conta) {
+        if ($conta["cpf"] == $cpf_conta) {
             $conta['saldo'] += $valor;
 
             print "recebeu  R$ {$valor}  na sua conta {$cpf_conta}";
@@ -83,9 +83,9 @@ function sacar(&$contas , $cpf_conta, $valor)
 
     foreach ($contas  as &$conta) 
     {
-        if ($conta['cpfCliente'] == $cpf_conta) {
+        if ($conta['cpf'] == $cpf_conta) {
             $conta['saldo'] -= $valor;
-            print "{$conta['cpfCliente']} recebeu R$ $valor ";
+            print "{$conta['cpf']} recebeu R$ $valor ";
             break;
         }
 
@@ -101,7 +101,7 @@ function consultarSaldo(&$contas, $cpfConta)
     foreach ( $contas as &$conta) 
     {
         
-        if ($conta['cpfCliente'] == $cpfConta)
+        if ($conta['cpf'] == $cpfConta)
         {
          
          print "Saldo da conta {$cpfConta} é de {$conta['saldo']} ";
@@ -155,7 +155,7 @@ function menu()
                 $verificador = false;
                 while ($verificador == false)
                  {
-                   $cpf = readline("informe seu cpf : \n");
+                   $cpf = readline("informe seu cpf (11 digitos) : \n");
                     if(strlen($cpf) == 11){
                         print "o cpf informado : $cpf é válido \n ";
                         $verificador = true;
@@ -197,7 +197,7 @@ function menu()
                                
                     $cpf1 = (int)readline("informe o cpf da conta (11 digitos):  \n");
                     foreach ($contas as &$conta) {
-                        if ($conta['cpfCliente'] == $cpf1)
+                        if ($conta['cpf'] == $cpf1)
                             {                                               
                                 print "cpf informado existente \n";
                                 $verificador = true;
@@ -219,7 +219,7 @@ function menu()
                                
                     $cpf1 = (int)readline("informe o cpf da conta (11 digitos):  \n");
                     foreach ($contas as &$conta) {
-                        if ($conta['cpfCliente'] == $cpf1)
+                        if ($conta['cpf'] == $cpf1)
                             {                                               
                                 print "cpf informado existente \n";
                                 $verificador = true;
@@ -227,6 +227,7 @@ function menu()
                             }
                     }
                } 
+
                $verificador2 = false;
                while ($verificador2 == false) 
                { 
@@ -252,7 +253,7 @@ function menu()
                                 
                      $cpf1 = (int)readline("informe o cpf da conta (11 digitos):  \n");
                      foreach ($contas as &$conta) {
-                         if ($conta['cpfCliente'] == $cpf1)
+                         if ($conta['cpf'] == $cpf1)
                              {                                               
                                  print "cpf informado existente \n";
                                  $verificador = true;
